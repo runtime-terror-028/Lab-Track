@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-class MyFrame(ctk.CTkFrame):
+class Login_window_frame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
@@ -32,8 +32,8 @@ class Login_window(ctk.CTk):
         self.label = ctk.CTkLabel(self, text= "Student login portal")
         self.label.pack(pady=20)
 
-        self.my_frame = MyFrame(master=self)
-        self.my_frame.pack(pady=20,padx=40,fill='both',expand=True) 
+        self.login_window_frame = Login_window_frame(master=self)
+        self.login_window_frame.pack(pady=20,padx=40,fill='both',expand=True) 
 
-login_app = Login_window()
-login_app.mainloop()
+login_window = Login_window()
+login_window.mainloop()

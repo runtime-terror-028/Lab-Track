@@ -1,43 +1,39 @@
-import socket
 import customtkinter as ctk
-import tkinter.messagebox as tkmb
 
-#GUI theme
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
-#GUI_Login--------------
-login_app = ctk.CTk()
-login_app.geometry("400x400")
-login_app.title("Student Login")
+class MyFrame(ctk.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
 
-def login():
-    userName = "admin" #<--------make a data base for this
-    password = "admin"
+        self.label = ctk.CTkLabel(self, text='Lab track') 
+        self.label.pack(pady=12,padx=10) 
+        
+        self.user_id = ctk.CTkEntry(self, placeholder_text="ID") 
+        self.user_id.pack(pady=12,padx=10) 
 
-    if user_id_entry.get() == userName and user_pass_entry.get() == password:
-        tkmb.showinfo(title="Login successfull", message="You have logged in Successfully")
-    else:
-        tkmb.showerror(title="Login Failed",message="Invalid Username and password")
+        self.user_pass= ctk.CTkEntry(self, placeholder_text="Password",show="*") 
+        self.user_pass.pack(pady=12,padx=10) 
 
-#login GUI-----------------
-label = ctk.CTkLabel(login_app,text="Student login portal") 
-label.pack(pady=20) 
-
-frame = ctk.CTkFrame(master=login_app) 
-frame.pack(pady=20,padx=40,fill='both',expand=True) 
-
-label = ctk.CTkLabel(master=frame,text='Lab track') 
-label.pack(pady=12,padx=10) 
-
-user_id_entry= ctk.CTkEntry(master=frame,placeholder_text="Username") 
-user_id_entry.pack(pady=12,padx=10) 
-
-user_pass_entry= ctk.CTkEntry(master=frame,placeholder_text="Password",show="*") 
-user_pass_entry.pack(pady=12,padx=10) 
+        self.button = ctk.CTkButton(self, text='Login',command=self.login) 
+        self.button.pack(pady=12,padx=10)
+    
+    def login(self):
+        print("button pressed")
 
 
-button = ctk.CTkButton(master=frame,text='Login',command=login) 
-button.pack(pady=12,padx=10) 
 
+class Login_window(ctk.CTk):
+    def __init__(self):
+        super().__init__()
 
+        self.title("Admin Login")
+        self.geometry("400x400")
+        self.grid_columnconfigure(0, weight=1)
+
+        self.label = ctk.CTkLabel(self, text= "Admin login portal")
+        self.label.pack(pady=20)
+
+        self.my_frame = MyFrame(master=self)
+        self.my_frame.pack(pady=20,padx=40,fill='both',expand=True) 
+
+login_app = Login_window()
 login_app.mainloop()

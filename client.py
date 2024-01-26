@@ -1,5 +1,7 @@
 import customtkinter as ctk
+import socket
 
+#Login GUI (frame)
 class Login_window_frame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -15,12 +17,18 @@ class Login_window_frame(ctk.CTkFrame):
 
         self.button = ctk.CTkButton(self, text='Login',command=self.login) 
         self.button.pack(pady=12,padx=10)
+
+        self.button = ctk.CTkButton(self, text='Registor',command=self.registor) 
+        self.button.pack(pady=12,padx=10)
     
     def login(self):
-        print("button pressed")
+        print("login button working")
+
+    def registor(self):
+        print("signup button working")
 
 
-
+#login GUI (main)
 class Login_window(ctk.CTk):
     def __init__(self):
         super().__init__()

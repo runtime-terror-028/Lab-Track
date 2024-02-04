@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import openpyxl
 
-class login_system:
+#note- remove registor option from client after asking suggestion from teacher
+class login_system:#<---------Login database using ms exel
     def __init__(self, excel_file='credentials.xlsx'):
         self.excel_file = excel_file
 
@@ -43,8 +44,8 @@ class login_system:
             self.register(entered_username, entered_password)
         else:
             messagebox.showerror("Registration Failed", "Username and password are required.")
-
-class login(login_system):
+#------------------------------------------------------------------------------
+class login(login_system):#<---------Login GUI
     def __init__(self):
         
         super().__init__()
@@ -63,56 +64,62 @@ class login(login_system):
 
         self.window_ask.mainloop()
 
-    def login_admin(self):
-        window_admin = tk.Tk()
-        window_admin.title("Admin")
+    def login_admin(self):#<------------admin login window
+        window_admin_login = tk.Tk()
+        window_admin_login.title("Admin")
 
-        username_label = tk.Label(window_admin, text="Username:")
+        username_label = tk.Label(window_admin_login, text="Username:")
         username_label.grid(row=0, column=0, sticky="e", pady=5)
-        username_entry = tk.Entry(window_admin)
+        username_entry = tk.Entry(window_admin_login)
         username_entry.grid(row=0, column=1, pady=5)
 
-        password_label = tk.Label(window_admin, text="Password:")
+        password_label = tk.Label(window_admin_login, text="Password:")
         password_label.grid(row=1, column=0, sticky="e", pady=5)
-        password_entry = tk.Entry(window_admin, show="*")
+        password_entry = tk.Entry(window_admin_login, show="*")
         password_entry.grid(row=1, column=1, pady=5)
 
-        login_button = tk.Button(window_admin, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
+        login_button = tk.Button(window_admin_login, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
         login_button.grid(row=2, column=0, pady=10)
 
-        register_button = tk.Button(window_admin, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
+        register_button = tk.Button(window_admin_login, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
         register_button.grid(row=2, column=1, pady=10)
 
-        window_admin.mainloop()
+        window_admin_login.mainloop()
 
-    def login_client(self):
-        window_client = tk.Tk()
-        window_client.title("Client")
+    def login_client(self):#<--------client login window
+        window_client_login = tk.Tk()
+        window_client_login.title("Client")
         
-        username_label = tk.Label(window_client, text="Username:")
+        username_label = tk.Label(window_client_login, text="Username:")
         username_label.grid(row=0, column=0, sticky="e", pady=5)
-        username_entry = tk.Entry(window_client)
+        username_entry = tk.Entry(window_client_login)
         username_entry.grid(row=0, column=1, pady=5)
 
-        password_label = tk.Label(window_client, text="Password:")
+        password_label = tk.Label(window_client_login, text="Password:")
         password_label.grid(row=1, column=0, sticky="e", pady=5)
-        password_entry = tk.Entry(window_client, show="*")
+        password_entry = tk.Entry(window_client_login, show="*")
         password_entry.grid(row=1, column=1, pady=5)
 
-        login_button = tk.Button(window_client, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
+        login_button = tk.Button(window_client_login, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
         login_button.grid(row=2, column=0, pady=10)
 
-        register_button = tk.Button(window_client, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
+        register_button = tk.Button(window_client_login, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
         register_button.grid(row=2, column=1, pady=10)
 
-        window_client.mainloop()
+        window_client_login.mainloop()
 
-    def login_kill_admin(self):
+    def login_kill_admin(self):#<---kill ask window and show admin login
         self.window_ask.destroy()
         self.login_admin()
 
-    def login_kill_client(self):
+    def login_kill_client(self):#<---kill ask window and show client login
         self.window_ask.destroy()
         self.login_client()
-
+#-------------------------------------------------------
+class main_window():#<-------------Main GUI window
+    def client_window():
+        window_client = tk.Tk()
+    def server_window():
+        window_server = tk.Tk()
+#-------------------------------------------------------
 login_instance = login()

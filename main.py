@@ -4,6 +4,9 @@ import openpyxl
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
+global sesson_status, login_type
+session_status = True
+login_type = "Client"
 #note- remove registor option from client after asking suggestion from teacher
 class login_system:#<---------Login database using ms exel
     def __init__(self, excel_file='credentials.xlsx'):
@@ -156,13 +159,13 @@ class login(login_system):#<---------Login GUI
             298.0,
             image=entry_image_1
         )
-        entry_1 = Entry(
+        username_entry = Entry(
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
-        entry_1.place(
+        username_entry.place(
             x=443.0,
             y=274.0,
             width=237.0,
@@ -176,13 +179,13 @@ class login(login_system):#<---------Login GUI
             218.0,
             image=entry_image_2
         )
-        entry_2 = Entry(
+        password_entry = Entry(
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
-        entry_2.place(
+        password_entry.place(
             x=443.0,
             y=194.0,
             width=237.0,
@@ -195,7 +198,7 @@ class login(login_system):#<---------Login GUI
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.login(username_entry.get(), password_entry.get()),
             relief="flat"
         )
         button_2.place(
@@ -265,13 +268,13 @@ class login(login_system):#<---------Login GUI
             191.0,
             image=entry_image_1
         )
-        entry_1 = Entry(
+        username_entry = Entry(
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
-        entry_1.place(
+        username_entry.place(
             x=144.0,
             y=172.0,
             width=209.0,
@@ -285,13 +288,13 @@ class login(login_system):#<---------Login GUI
             252.0,
             image=entry_image_2
         )
-        entry_2 = Entry(
+        password_entry = Entry(
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
-        entry_2.place(
+        password_entry.place(
             x=144.0,
             y=233.0,
             width=209.0,
@@ -304,7 +307,7 @@ class login(login_system):#<---------Login GUI
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: self.login(username_entry.get(), password_entry.get()),
             relief="flat"
         )
         button_1.place(
@@ -359,10 +362,177 @@ class login(login_system):#<---------Login GUI
         self.login_admin()
 
 #-------------------------------------------------------
-class main_window():#<-------------Main GUI window
-    def client_window():
-        window_client = tk.Tk()
-    def server_window():
-        window_server = tk.Tk()
+login_instance = login()#<------------------------------Start here
 #-------------------------------------------------------
-login_instance = login()
+class Client_Main():#<---------main client window
+    def __init__(self):
+        super().__init__()
+        self.window = tk.Tk()
+        self.window.title("Client")
+        self.window.geometry("744x539")
+        self.window.configure(bg = "#A5938D")
+
+        canvas = Canvas(
+            self.window,
+            bg = "#A5938D",
+            height = 539,
+            width = 744,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+
+        canvas.place(x = 0, y = 0)
+        image_image_1 = PhotoImage(
+            file=("assets/kiit.png"))
+        image_1 = canvas.create_image(
+            372.0,
+            52.0,
+            image=image_image_1
+        )
+
+        canvas.create_rectangle(
+            27.0,
+            90.0,
+            269.0,
+            236.0,
+            fill="#D9D9D9",
+            outline="")
+
+        button_image_1 = PhotoImage(
+            file=("assets/close_server_button.png"))
+        button_1 = Button(
+            image=button_image_1,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_1 clicked"),
+            relief="flat"
+        )
+        button_1.place(
+            x=155.0,
+            y=120.0,
+            width=76.0,
+            height=30.0
+        )
+
+        button_image_2 = PhotoImage(
+            file=("assets/start_server_button.png"))
+        button_2 = Button(
+            image=button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_2 clicked"),
+            relief="flat"
+        )
+        button_2.place(
+            x=46.0,
+            y=120.0,
+            width=76.0,
+            height=26.0
+        )
+
+        canvas.create_text(
+            115.0,
+            95.0,
+            anchor="nw",
+            text="Options",
+            fill="#000000",
+            font=("Inter", 12 * -1)
+        )
+
+        button_image_3 = PhotoImage(
+            file=("assets/port_button.png"))
+        button_3 = Button(
+            image=button_image_3,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_3 clicked"),
+            relief="flat"
+        )
+        button_3.place(
+            x=48.0,
+            y=168.0,
+            width=51.648651123046875,
+            height=28.0
+        )
+
+        entry_image_1 = PhotoImage(
+            file=("assets/port_entry.png"))
+        entry_bg_1 = canvas.create_image(
+            182.5,
+            182.0,
+            image=entry_image_1
+        )
+        entry_1 = Entry(
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        entry_1.place(
+            x=114.0,
+            y=168.0,
+            width=137.0,
+            height=26.0
+        )
+
+        entry_image_2 = PhotoImage(
+            file=("assets/server_console.png"))
+        entry_bg_2 = canvas.create_image(
+            148.0,
+            381.5,
+            image=entry_image_2
+        )
+        entry_2 = Text(
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0
+        )
+        entry_2.place(
+            x=27.0,
+            y=254.0,
+            width=242.0,
+            height=253.0
+        )
+
+        entry_image_3 = PhotoImage(
+            file=("assets/network_user_list.png"))
+        entry_bg_3 = canvas.create_image(
+            521.5,
+            306.0,
+            image=entry_image_3
+        )
+        entry_3 = Text(
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0
+        )
+        entry_3.place(
+            x=327.0,
+            y=103.0,
+            width=389.0,
+            height=404.0
+        )
+        self.window.resizable(False, False)
+        self.window.mainloop()
+
+#-------------------------------------------------------
+class Admin_Main():#<---------main admin window
+    def __init__(self):
+        super().__init__()
+        self.window = tk.Tk()
+        self.widnow.title("Admin")
+        self.window.geometry("744x457")
+        self.window.configure(bg = "#FFFFFF")
+#-------------------------------------------------------
+if(session_status == True and login_type == "Client"):
+    abc = Client_Main()
+elif(session_status == True and login_type == "Admin"):
+    pass
+elif(session_status == False):
+    pass
+else:
+    messagebox.showerror("There was some unknown error in the code")
+print(session_status, login_type)

@@ -79,6 +79,7 @@ class Login_Client_Window():
 
     def open_login_admin(self):
         self.master.destroy()
+#-----------------------------------------------------------------------------------
 
 abc = Login_Client_Window()
 abc.run()

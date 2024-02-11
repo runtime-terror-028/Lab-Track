@@ -231,7 +231,7 @@ class login(login_system):#<---------Login GUI
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=self.login_kill_client_client,
             relief="flat"
         )
         button_1.place(
@@ -339,6 +339,10 @@ class login(login_system):#<---------Login GUI
 
     def login_kill_client(self):#<---kill ask window and show client login
         self.window_ask.destroy()
+        self.login_client()
+
+    def login_kill_client_client(self):
+        self.window_client_login.destroy()
         self.login_client()
 #-------------------------------------------------------
 class main_window():#<-------------Main GUI window

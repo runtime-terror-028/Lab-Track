@@ -47,142 +47,33 @@ class login_system:#<---------Login database using ms exel
         else:
             messagebox.showerror("Registration Failed", "Username and password are required.")
 #------------------------------------------------------------------------------
+# class login(login_system):#<---------Login GUI
+#     def __init__(self):
+#         super().__init__()
+
+#         self.window_ask = tk.Tk()
+#         self.window_ask.title("ask")
+
+#         label = tk.Label(self.window_ask, text="Choose User Type:")
+#         label.pack(pady=10)
+
+#         option1_button = tk.Button(self.window_ask, text="Student", command=self.login_kill_client)
+#         option1_button.pack(pady=5)
+
+#         option2_button = tk.Button(self.window_ask, text="Admin", command=self.login_kill_admin)
+#         option2_button.pack(pady=5)
+
+#         self.window_ask.mainloop()
 class login(login_system):#<---------Login GUI
-    def __init__(self):
+    def __init__(self):#<-----Client login
         super().__init__()
-
-        self.window_ask = tk.Tk()
-        self.window_ask.title("ask")
-
-        label = tk.Label(self.window_ask, text="Choose User Type:")
-        label.pack(pady=10)
-
-        option1_button = tk.Button(self.window_ask, text="Student", command=self.login_kill_client)
-        option1_button.pack(pady=5)
-
-        option2_button = tk.Button(self.window_ask, text="Admin", command=self.login_kill_admin)
-        option2_button.pack(pady=5)
-
-        self.window_ask.mainloop()
-
-    def login_admin(self):#<------------admin login window
-        window_admin_login = tk.Tk()
-        window_admin_login.title("Admin")
-        window_admin_login.geometry("496x433")
-        window_admin_login.configure(bg = "#FFFFFF")
+        self.window_client_login = tk.Tk()
+        self.window_client_login.title("Client")
+        self.window_client_login.geometry("744x457")
+        self.window_client_login.configure(bg = "#FFFFFF")
 
         canvas = Canvas(
-            window_admin_login,
-            bg = "#FFFFFF",
-            height = 433,
-            width = 496,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
-        )
-
-        canvas.place(x = 0, y = 0)
-        image_image_1 = PhotoImage(
-            file=("assets/kiit.png"))
-        image_1 = canvas.create_image(
-            248.0,
-            52.0,
-            image=image_image_1
-        )
-
-        canvas.create_text(
-            172.0,
-            113.0,
-            anchor="nw",
-            text="Admin Login",
-            fill="#000000",
-            font=("Inter Medium", 24 * -1)
-        )
-
-        entry_image_1 = PhotoImage(
-            file=("assets/entry_1.png"))
-        entry_bg_1 = canvas.create_image(
-            248.5,
-            191.0,
-            image=entry_image_1
-        )
-        entry_1 = Entry(
-            bd=0,
-            bg="#FFFFFF",
-            fg="#000716",
-            highlightthickness=0
-        )
-        entry_1.place(
-            x=144.0,
-            y=172.0,
-            width=209.0,
-            height=36.0
-        )
-
-        entry_image_2 = PhotoImage(
-            file=("assets/entry_2.png"))
-        entry_bg_2 = canvas.create_image(
-            248.5,
-            252.0,
-            image=entry_image_2
-        )
-        entry_2 = Entry(
-            bd=0,
-            bg="#FFFFFF",
-            fg="#000716",
-            highlightthickness=0
-        )
-        entry_2.place(
-            x=144.0,
-            y=233.0,
-            width=209.0,
-            height=36.0
-        )
-
-        button_image_1 = PhotoImage(
-            file=("assets/admin_login_button.png"))
-        button_1 = Button(
-            image=button_image_1,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
-            relief="flat"
-        )
-        button_1.place(
-            x=207.0,
-            y=314.0,
-            width=82.0,
-            height=38.0
-        )
-        window_admin_login.resizable(False, False)
-        window_admin_login.mainloop()
-
-        # username_label = tk.Label(window_admin_login, text="Username:")
-        # username_label.grid(row=0, column=0, sticky="e", pady=5)
-        # username_entry = tk.Entry(window_admin_login)
-        # username_entry.grid(row=0, column=1, pady=5)
-
-        # password_label = tk.Label(window_admin_login, text="Password:")
-        # password_label.grid(row=1, column=0, sticky="e", pady=5)
-        # password_entry = tk.Entry(window_admin_login, show="*")
-        # password_entry.grid(row=1, column=1, pady=5)
-
-        # login_button = tk.Button(window_admin_login, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
-        # login_button.grid(row=2, column=0, pady=10)
-
-        # register_button = tk.Button(window_admin_login, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
-        # register_button.grid(row=2, column=1, pady=10)
-
-        # window_admin_login.mainloop()
-
-    def login_client(self):#<--------client login window
-        window_client_login = tk.Tk()
-        window_client_login.title("Client")
-        window_client_login.geometry("744x457")
-        window_client_login.configure(bg = "#FFFFFF")
-
-        canvas = Canvas(
-            window_client_login,
+            self.window_client_login,
             bg = "#FFFFFF",
             height = 457,
             width = 744,
@@ -231,7 +122,7 @@ class login(login_system):#<---------Login GUI
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=self.login_kill_client_client,
+            command=self.login_kill_client,
             relief="flat"
         )
         button_1.place(
@@ -330,20 +221,143 @@ class login(login_system):#<---------Login GUI
         # register_button.grid(row=2, column=1, pady=10)
 
         # window_client_login.mainloop()
-        window_client_login.resizable(False, False)
-        window_client_login.mainloop()
+        self.window_client_login.resizable(False, False)
+        self.window_client_login.mainloop()
+#-----------------------------------------------------------------------------------------
+    def login_admin(self):#<-------------------admin login
+        self.window_admin_login = tk.Tk()
+        self.window_admin_login.title("Admin")
+        self.window_admin_login.geometry("496x433")
+        self.window_admin_login.configure(bg = "#FFFFFF")
 
-    def login_kill_admin(self):#<---kill ask window and show admin login
-        self.window_ask.destroy()
+        canvas = Canvas(
+            self.window_admin_login,
+            bg = "#FFFFFF",
+            height = 433,
+            width = 496,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+
+        canvas.place(x = 0, y = 0)
+        image_image_1 = PhotoImage(
+            file=("assets/kiit.png"))
+        image_1 = canvas.create_image(
+            248.0,
+            52.0,
+            image=image_image_1
+        )
+
+        canvas.create_text(
+            172.0,
+            113.0,
+            anchor="nw",
+            text="Admin Login",
+            fill="#000000",
+            font=("Inter Medium", 24 * -1)
+        )
+
+        entry_image_1 = PhotoImage(
+            file=("assets/entry_1.png"))
+        entry_bg_1 = canvas.create_image(
+            248.5,
+            191.0,
+            image=entry_image_1
+        )
+        entry_1 = Entry(
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        entry_1.place(
+            x=144.0,
+            y=172.0,
+            width=209.0,
+            height=36.0
+        )
+
+        entry_image_2 = PhotoImage(
+            file=("assets/entry_2.png"))
+        entry_bg_2 = canvas.create_image(
+            248.5,
+            252.0,
+            image=entry_image_2
+        )
+        entry_2 = Entry(
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        entry_2.place(
+            x=144.0,
+            y=233.0,
+            width=209.0,
+            height=36.0
+        )
+
+        button_image_1 = PhotoImage(
+            file=("assets/admin_login_button.png"))
+        button_1 = Button(
+            image=button_image_1,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_1 clicked"),
+            relief="flat"
+        )
+        button_1.place(
+            x=207.0,
+            y=314.0,
+            width=82.0,
+            height=38.0
+        )
+        self.window_admin_login.resizable(False, False)
+        self.window_admin_login.mainloop()
+
+        # username_label = tk.Label(window_admin_login, text="Username:")
+        # username_label.grid(row=0, column=0, sticky="e", pady=5)
+        # username_entry = tk.Entry(window_admin_login)
+        # username_entry.grid(row=0, column=1, pady=5)
+
+        # password_label = tk.Label(window_admin_login, text="Password:")
+        # password_label.grid(row=1, column=0, sticky="e", pady=5)
+        # password_entry = tk.Entry(window_admin_login, show="*")
+        # password_entry.grid(row=1, column=1, pady=5)
+
+        # login_button = tk.Button(window_admin_login, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
+        # login_button.grid(row=2, column=0, pady=10)
+
+        # register_button = tk.Button(window_admin_login, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
+        # register_button.grid(row=2, column=1, pady=10)
+
+        # window_admin_login.mainloop()
+        #---------------------------------------------------------
+        # username_label = tk.Label(window_client_login, text="Username:")
+        # username_label.grid(row=0, column=0, sticky="e", pady=5)
+        # username_entry = tk.Entry(window_client_login)
+        # username_entry.grid(row=0, column=1, pady=5)
+
+        # password_label = tk.Label(window_client_login, text="Password:")
+        # password_label.grid(row=1, column=0, sticky="e", pady=5)
+        # password_entry = tk.Entry(window_client_login, show="*")
+        # password_entry.grid(row=1, column=1, pady=5)
+
+        # login_button = tk.Button(window_client_login, text="Login", command=lambda: self.login(username_entry.get(), password_entry.get()))
+        # login_button.grid(row=2, column=0, pady=10)
+
+        # register_button = tk.Button(window_client_login, text="Register", command=lambda: self.register_user(username_entry.get(), password_entry.get()))
+        # register_button.grid(row=2, column=1, pady=10)
+
+        # window_client_login.mainloop()
+        # window_client_login.resizable(False, False)
+        # window_client_login.mainloop()
+
+    def login_kill_client(self):#<---kill login window && open admin login window
+        self.window_client_login.destroy()
         self.login_admin()
 
-    def login_kill_client(self):#<---kill ask window and show client login
-        self.window_ask.destroy()
-        self.login_client()
-
-    def login_kill_client_client(self):
-        self.window_client_login.destroy()
-        self.login_client()
 #-------------------------------------------------------
 class main_window():#<-------------Main GUI window
     def client_window():

@@ -3,10 +3,25 @@ from tkinter import messagebox
 import openpyxl
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+import time
+import socket
+
+
 class status:
     session_status = False
     login_type = ""
+    user_id = ""
 
+    def get_ip_address():
+        try:
+            hostname = socket.gethostname()
+            ip_address = socket.gethostbyname(hostname)
+            return ip_address
+        except Exception as e:
+            print("Error:", e)
+            return None
+    ip_address = get_ip_address()
+    IP = ip_address
 
 class Login_System(status):#<---------Login database using ms exel
     def __init__(self, excel_file='credentials.xlsx'):
@@ -44,6 +59,7 @@ class Login_System(status):#<---------Login database using ms exel
             messagebox.showinfo("Login Successful", "Welcome, {}".format(entered_username))
             status.login_type = "client"
             status.session_status = True
+            status.user_id = entered_username
         elif self.authenticate(entered_username, entered_password, entered_type) and entered_type == "admin":
             messagebox.showinfo("Login Successful", "Welcome, {}".format(entered_username))
             status.login_type = "admin"
@@ -578,7 +594,7 @@ class Client_Main():#<---------main admin window
             183.0,
             298.0,
             anchor="nw",
-            text="Null",
+            text="Null3",#<---student name
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -587,7 +603,7 @@ class Client_Main():#<---------main admin window
             183.0,
             273.0,
             anchor="nw",
-            text="Null",
+            text=status.user_id,
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -623,7 +639,7 @@ class Client_Main():#<---------main admin window
             183.0,
             248.0,
             anchor="nw",
-            text="Null",
+            text=status.IP,
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -640,7 +656,7 @@ class Client_Main():#<---------main admin window
             183.0,
             404.0,
             anchor="nw",
-            text="Null",
+            text="Null4",
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -658,7 +674,7 @@ class Client_Main():#<---------main admin window
             183.0,
             369.0,
             anchor="nw",
-            text="Null",
+            text="Null5",
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -697,7 +713,34 @@ class Client_Main():#<---------main admin window
             font=("Inter Medium", 20 * -1)
         )
         self.window.resizable(False, False)
+        # Create a label for session time
+        self.session_time_label = tk.Label(
+            self.window,
+            text="00:00:00",
+            font=("Inter Medium", 16 * -1),
+            fg="#000000"
+        )
+        self.session_time_label.place(x=183.0, y=369.0, anchor="nw")
+
+        # Start the session timer
+        self.session_start_time = time.time()
+
+        self.update_session_time()
         self.window.mainloop()
+
+    def create_canvas_elements(self):
+        image_image_1 = PhotoImage(file=("assets/client_main_bg.png"))
+        self.image_1 = self.canvas.create_image(341.0, 384.0, image=image_image_1)
+
+
+    def update_session_time(self):
+        elapsed_time = time.time() - self.session_start_time
+        hours, remainder = divmod(elapsed_time, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        time_string = "{:02d}:{:02d}:{:02d}".format(int(hours), int(minutes), int(seconds))
+        self.session_time_label.config(text="Session Time: " + time_string)
+        self.session_time_label.update()  # Force update of label
+        self.window.after(1000, self.update_session_time)
 
     def close_client_main(self):
         self.window.destroy()

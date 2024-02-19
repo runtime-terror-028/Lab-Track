@@ -6,6 +6,7 @@ from tkinter import messagebox
 
 
 class login(login_system.Login_System):#<---------Login GUI
+
     def __init__(self):#<-----Client login
         super().__init__()
         self.window_client_login = tk.Tk()
@@ -136,7 +137,7 @@ class login(login_system.Login_System):#<---------Login GUI
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.login(username_entry.get(), password_entry.get(), "client"),
+            command=lambda: (self.login(username_entry.get(), password_entry.get(), "client"), self.kill_login_client()),
             relief="flat"
         )
         button_2.place(
@@ -229,7 +230,7 @@ class login(login_system.Login_System):#<---------Login GUI
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.login(username_entry.get(), password_entry.get(), "admin"),
+            command=lambda: (self.login(username_entry.get(), password_entry.get(), "admin"), self.kill_login_admin()),
             relief="flat"
         )
         button_1.place(
@@ -282,6 +283,10 @@ class login(login_system.Login_System):#<---------Login GUI
     def login_kill_client(self):#<---kill login window && open admin login window
         self.window_client_login.destroy()
         self.login_admin()
+    def kill_login_client(self):#<---kill login window
+        self.window_client_login.destroy()
+    def kill_login_admin(self):#<---kill login window
+        self.window_admin_login.destroy()
 
 #-------------------------------------------------------
 if __name__ == "__main__":

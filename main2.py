@@ -7,12 +7,13 @@ from tkinter import messagebox
 login_instance = login_gui.login()
 
 if(login_system.status.session_status == True and login_system.status.login_type == "admin"):
-    abc = Admin_Main()
+    admin_main = Admin_Main()
 elif(login_system.status.session_status == True and login_system.status.login_type == "client"):
-    abc = Client_Main()
+    client_main = Client_Main()
     pass
 elif(login_system.status.session_status == False):
     pass
 else:
     messagebox.showerror("There was some unknown error in the code")
 print(login_system.status.session_status, login_system.status.login_type)
+

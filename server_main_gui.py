@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
-import openpyxl
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import time
 import socket
+import sys
+from io import StringIO
 
 class Admin_Main():#<---------main admin window
     def __init__(self):
@@ -50,13 +51,6 @@ class Admin_Main():#<---------main admin window
             font=("Inter Bold", 24 * -1)
         )
 
-        # entry_image_1 = PhotoImage(
-        #     file=("assets/aentry_1.png"))
-        # entry_bg_1 = canvas.create_image(
-        #     583.0,
-        #     367.5,
-        #     image=entry_image_1
-        # )
         entry_1 = Text(
             bd=0,
             bg="#D9D9D9",
@@ -70,20 +64,13 @@ class Admin_Main():#<---------main admin window
             height=443.0
         )
 
-        # entry_image_2 = PhotoImage(
-        #     file=("assets/aentry_1.png"))
-        # entry_bg_2 = canvas.create_image(
-        #     164.0,
-        #     428.0,
-        #     image=entry_image_2
-        # )
-        entry_2 = Text(
+        self.entry_2 = Text(
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0
         )
-        entry_2.place(
+        self.entry_2.place(
             x=21.0,
             y=266.0,
             width=286.0,
@@ -107,13 +94,6 @@ class Admin_Main():#<---------main admin window
             font=("Inter Bold", 13 * -1)
         )
 
-        # entry_image_3 = PhotoImage(
-        #     file=("assets/aentry_3.png"))
-        # entry_bg_3 = canvas.create_image(
-        #     211.0,
-        #     201.5,
-        #     image=entry_image_3
-        # )
         entry_3 = Entry(
             bd=0,
             bg="#FFFFFF",
@@ -133,7 +113,7 @@ class Admin_Main():#<---------main admin window
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("change port clicked"),
+            command=lambda: self.change_port(),
             relief="flat"
         )
         button_1.place(
@@ -145,3 +125,17 @@ class Admin_Main():#<---------main admin window
 
         self.window.resizable(False, False)
         self.window.mainloop()
+
+    def change_port(self):
+        # Redirect standard output
+        sys.stdout = mystdout = StringIO()
+
+        # Your port changing code goes here
+        print("change port clicked")  # This will be redirected to mystdout
+
+        # Get the output and display in entry_2
+        output = mystdout.getvalue()
+        self.entry_2.insert(tk.END, output)
+
+# Instantiate the Admin_Main class
+Admin_Main()

@@ -1,8 +1,46 @@
 import tkinter as tk
 from tkinter import Canvas, Text, Button, PhotoImage
 import socket
+import threading
 import sys
-from io import StringIO
+import openpyxl
+import login_system
+import client_main_gui
+from login_system import status
+
+class Login_System():
+    def __init__(self, excel_file='credentials.xlsx'):
+        self.excel_file = excel_file
+        self.workbook = openpyxl.load_workbook(self.excel_file)
+        self.sheet = self.workbook.active
+
+    def authenticate(self, username, password, type):
+        for row in self.sheet.iter_rows(min_row=2, values_only=True):
+            stored_username, stored_password, stored_type = row
+            if username == stored_username and str(password) == str(stored_password) and type == stored_type:
+                return True, "True"  # Return a tuple indicating success and a message
+        return False, "False"
+
+    def login(self, entered_username, entered_password, entered_type):
+        success, message = self.authenticate(entered_username, entered_password, entered_type)
+        if success:
+            status.login_type = "client"
+            status.session_status = True
+            status.user_id = entered_username
+            print("auth")
+        return success, message  # Return authentication result and message
+
+
+class StdoutRedirector(object):
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+
+    def write(self, s):
+        self.text_widget.insert(tk.END, s)
+        self.text_widget.see(tk.END)  # Scroll to the end
+
+    def flush(self):
+        pass  # No need to flush anything in this case
 
 class Admin_Main():
     def __init__(self):
@@ -109,37 +147,51 @@ class Admin_Main():
         self.window.resizable(False, False)
         self.window.mainloop()
 
-    # def change_port(self):
-    #     # Redirect standard output
-    #     sys.stdout = mystdout = StringIO()
-
-    #     # Your port changing code goes here
-    #     print("change port clicked")  # This will be redirected to mystdout
-
-    #     # Get the output and display in entry_2
-    #     output = mystdout.getvalue()
-    #     self.entry_2.insert(tk.END, output)
-
     def create_socket(self, port=55555):
+        threading.Thread(target=self._create_socket, args=(port,)).start()
+
+    def _create_socket(self, port):
         try:
-            port = int(port)
+            sys.stdout = StdoutRedirector(self.entry_2)
             # Create a socket object
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.entry_2.insert(tk.END, "Socket successfully created\n")
+            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print("Socket successfully created")
 
             # Bind to the port
-            s.bind(('localhost', port))
-            self.entry_2.insert(tk.END, f"Socket bound to port {port}\n")
+            server_socket.bind(('192.168.0.102', int(port)))
+            print(f"Socket bound to port {port}")
 
             # Listen for incoming connections
-            s.listen(5)
-            self.entry_2.insert(tk.END, "Socket is listening\n")
+            server_socket.listen(5)
+            print("Socket is listening")
 
-            return s
+            while True:
+                # Accept incoming connection
+                client_socket, client_address = server_socket.accept()
+                print("Connection accepted from", client_address)
 
-        except ValueError:
-            self.entry_2.insert(tk.END, "Invalid port value. Please enter a valid integer port.\n")
-        except socket.error as err:
-            self.entry_2.insert(tk.END, f"Socket creation failed with error: {err}\n")
-
-abc = Admin_Main()
+                # Receive messages
+                while True:
+                    data = client_socket.recv(1024)
+                    if not data:
+                        break
+                    decoded_data = data.decode()
+                    print("Received data:", decoded_data)  # Print received data
+                    parts = decoded_data.split(',')  # Assuming ',' is the delimiter
+                    if len(parts) >= 3:
+                        IDpart = parts[0]
+                        PASSWORDpart = parts[1]
+                        TYPEpart = parts[2]
+                        # Call the login method of Login_System class
+                        login_system = Login_System()
+                        success, message = login_system.login(IDpart, PASSWORDpart, TYPEpart)
+                        if success:
+                            client_socket.sendall(message.encode())  # Send the message back to the client
+                        else:
+                            client_socket.sendall(b"Login failed")  # Send a failure message back to the client
+                    else:
+                        print("Received data does not contain three parts")
+        except Exception as e:
+            print("Error:", e)
+        finally:
+            server_socket.close()

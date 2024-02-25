@@ -3,6 +3,8 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import login_system
 from tkinter import messagebox
+import socket
+import login_system
 
 
 class login(login_system.Login_System):#<---------Login GUI
@@ -137,7 +139,7 @@ class login(login_system.Login_System):#<---------Login GUI
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: (self.login(username_entry.get(), password_entry.get(), "client"), self.kill_login_client()),
+            command=lambda: (request_server.make_data(username_entry.get(),password_entry.get(),"client"), self.kill_login_client()),
             relief="flat"
         )
         button_2.place(
@@ -288,161 +290,33 @@ class login(login_system.Login_System):#<---------Login GUI
     def kill_login_admin(self):#<---kill login window
         self.window_admin_login.destroy()
 
+class request_server(login):
+    def Auth(value):
+        if (value == "True"):
+            print("working")
+            login_system.status.session_status = True
+            login_system.status.login_type = "client"
+        else:
+            login_system.status.session_status = False
+
+    def send_data_to_server(data):
+        HOST = '192.168.0.102'  # Server IP address
+        PORT = 55555            # Server port
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.connect((HOST, PORT))
+            client_socket.sendall(data.encode())
+            data1 = client_socket.recv(1024)
+            if (data1):
+                decode_data1 = data1.decode()
+                request_server.Auth(decode_data1)
+
+    def make_data(Id, Password, Type):
+        fdata = Id+","+Password+","+Type
+        request_server.send_data_to_server(fdata)
+        login_system.status.user_id = Id
 #-------------------------------------------------------
 if __name__ == "__main__":
     messagebox.showinfo("This is not a entry point, please start from main.py")
     login_instance = login()#<------------------------------Start here
 #-------------------------------------------------------
-class Admin_Main():#<---------main admin window
-    def __init__(self):
-        super().__init__()
-        self.window = tk.Tk()
-        self.window.title("Client")
-        self.window.geometry("744x539")
-        self.window.configure(bg = "#A5938D")
-
-        canvas = Canvas(
-            self.window,
-            bg = "#A5938D",
-            height = 539,
-            width = 744,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
-        )
-
-        canvas.place(x = 0, y = 0)
-        image_image_1 = PhotoImage(
-            file=("assets/kiit.png"))
-        image_1 = canvas.create_image(
-            372.0,
-            52.0,
-            image=image_image_1
-        )
-
-        canvas.create_rectangle(
-            27.0,
-            90.0,
-            269.0,
-            236.0,
-            fill="#D9D9D9",
-            outline="")
-
-        button_image_1 = PhotoImage(
-            file=("assets/close_server_button.png"))
-        button_1 = Button(
-            image=button_image_1,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
-            relief="flat"
-        )
-        button_1.place(
-            x=155.0,
-            y=120.0,
-            width=76.0,
-            height=30.0
-        )
-
-        button_image_2 = PhotoImage(
-            file=("assets/start_server_button.png"))
-        button_2 = Button(
-            image=button_image_2,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
-            relief="flat"
-        )
-        button_2.place(
-            x=46.0,
-            y=120.0,
-            width=76.0,
-            height=26.0
-        )
-
-        canvas.create_text(
-            115.0,
-            95.0,
-            anchor="nw",
-            text="Options",
-            fill="#000000",
-            font=("Inter", 12 * -1)
-        )
-
-        button_image_3 = PhotoImage(
-            file=("assets/port_button.png"))
-        button_3 = Button(
-            image=button_image_3,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
-            relief="flat"
-        )
-        button_3.place(
-            x=48.0,
-            y=168.0,
-            width=51.648651123046875,
-            height=28.0
-        )
-
-        entry_image_1 = PhotoImage(
-            file=("assets/port_entry.png"))
-        entry_bg_1 = canvas.create_image(
-            182.5,
-            182.0,
-            image=entry_image_1
-        )
-        entry_1 = Entry(
-            bd=0,
-            bg="#FFFFFF",
-            fg="#000716",
-            highlightthickness=0
-        )
-        entry_1.place(
-            x=114.0,
-            y=168.0,
-            width=137.0,
-            height=26.0
-        )
-
-        entry_image_2 = PhotoImage(
-            file=("assets/server_console.png"))
-        entry_bg_2 = canvas.create_image(
-            148.0,
-            381.5,
-            image=entry_image_2
-        )
-        entry_2 = Text(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        entry_2.place(
-            x=27.0,
-            y=254.0,
-            width=242.0,
-            height=253.0
-        )
-
-        entry_image_3 = PhotoImage(
-            file=("assets/network_user_list.png"))
-        entry_bg_3 = canvas.create_image(
-            521.5,
-            306.0,
-            image=entry_image_3
-        )
-        entry_3 = Text(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        entry_3.place(
-            x=327.0,
-            y=103.0,
-            width=389.0,
-            height=404.0
-        )
-        self.window.resizable(False, False)
-        self.window.mainloop()

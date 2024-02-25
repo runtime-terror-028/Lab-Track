@@ -1,5 +1,6 @@
 import openpyxl
 from tkinter import messagebox
+import socket
 
 class status:
     session_status = False
@@ -58,3 +59,24 @@ class Login_System():#<---------Login database using ms exel
     #         self.register(entered_username, entered_password)
     #     else:
     #         messagebox.showerror("Registration Failed", "Username and password are required.")
+            
+class Login_System_client():#<---------Login database using ms exel
+    def __init__(self, excel_file='credentials.xlsx'):
+        self.excel_file = excel_file
+        self.workbook = openpyxl.load_workbook(self.excel_file)
+        self.sheet = self.workbook.active
+    def authenticate(self, username, password, type):
+        for row in self.sheet.iter_rows(min_row=2, values_only=True):
+            stored_username, stored_password, stored_type = row
+            if username == stored_username and str(password) == str(stored_password) and type == stored_type :
+                return True
+        return False
+    def login(self, entered_username, entered_password, entered_type):
+        if self.authenticate(entered_username, entered_password, entered_type) and entered_type == "client":
+            status.login_type = "client"
+            status.session_status = True
+            status.user_id = entered_username
+            print("auth working")
+
+        else:
+            print("error")

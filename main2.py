@@ -12,9 +12,7 @@ if(login_system.status.session_status == True and login_system.status.login_type
 elif(login_system.status.session_status == True and login_system.status.login_type == "client"):
     print(login_system.status.session_status, login_system.status.login_type)
     client_main = Client_Main()
-    pass
 elif(login_system.status.session_status == False):
-    pass
+    print("sesson is False")
 else:
     messagebox.showerror("There was some unknown error in the code")
-print(login_system.status.session_status, login_system.status.login_type)

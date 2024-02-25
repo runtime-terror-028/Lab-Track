@@ -7,6 +7,7 @@ import time
 import socket
 import login_system
 import login_gui
+import login_system
 
 class Client_Main():#<---------main admin window
     def __init__(self):
@@ -98,7 +99,7 @@ class Client_Main():#<---------main admin window
             183.0,
             273.0,
             anchor="nw",
-            # text=status.user_id,
+            text=login_system.status.user_id,
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -134,7 +135,7 @@ class Client_Main():#<---------main admin window
             183.0,
             248.0,
             anchor="nw",
-            # text=status.IP,
+            text=Client_Main.get_ip(),
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -151,7 +152,7 @@ class Client_Main():#<---------main admin window
             183.0,
             404.0,
             anchor="nw",
-            text="Null4",
+            text="Online",
             fill="#000000",
             font=("Inter Medium", 16 * -1)
         )
@@ -236,6 +237,11 @@ class Client_Main():#<---------main admin window
         self.session_time_label.config(text="Session Time: " + time_string)
         self.session_time_label.update()  # Force update of label
         self.window.after(1000, self.update_session_time)
+
+    def get_ip():
+        hostname = socket.gethostname()
+        ip_address = socket.gethostbyname(hostname)
+        return ip_address
 
     def close_client_main(self):
         self.window.destroy()

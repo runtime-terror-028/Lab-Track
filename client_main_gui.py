@@ -12,6 +12,13 @@ import login_system
 class Client_Main():#<---------main admin window
     def __init__(self):
         super().__init__()
+        self.host = "127.0.0.1"
+        self.port = 9999
+        self.user_id = login_system.status.user_id
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.connect((self.host, self.port))
+        self.socket.send(self.user_id.encode())
+
         self.window = tk.Tk()
         self.window.title("Admin")
         self.window.geometry("744x457")
@@ -190,7 +197,7 @@ class Client_Main():#<---------main admin window
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.close_client_main,
+            command=self.close_client_main,
             relief="flat"
         )
         button_1.place(
@@ -245,3 +252,4 @@ class Client_Main():#<---------main admin window
 
     def close_client_main(self):
         self.window.destroy()
+

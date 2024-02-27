@@ -5,8 +5,9 @@ import threading
 import sys
 import openpyxl
 import login_system
-import client_main_gui
 from login_system import status
+from tkinter import ttk
+import time
 
 class Login_System():
     def __init__(self, excel_file='credentials.xlsx'):
@@ -44,6 +45,9 @@ class StdoutRedirector(object):
 
 class Admin_Main():
     def __init__(self):
+        self.host = "127.0.0.1"
+        self.port = 9999
+        self.clients = {}
         self.window = tk.Tk()
         self.window.title("Admin")
         self.window.geometry("848x610")
@@ -79,18 +83,32 @@ class Admin_Main():
             fill="#FFFFFF",
             font=("Inter Bold", 24 * -1)
         )
-        entry_1 = Text(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
+        self.tree = ttk.Treeview(
+            self.window,
+            columns=("IP Address", "User ID", "Session Time"),
         )
-        entry_1.place(
+        self.tree.heading("#0", text="ID")
+        self.tree.heading("IP Address", text="IP Address")
+        self.tree.heading("User ID", text="User ID")
+        self.tree.heading("Session Time", text="Session Time")
+        self.tree.place(
             x=336.0,
             y=145.0,
             width=494.0,
             height=443.0
         )
+
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.bind((self.host, self.port))
+        self.server_socket.listen(5)
+        
+        self.accept_thread = threading.Thread(target=self.accept_connections)
+        self.accept_thread.start()
+        
+        self.update_tree_thread = threading.Thread(target=self.update_tree)
+        self.update_tree_thread.daemon = True
+        self.update_tree_thread.start()
+        
         self.entry_2 = Text(
             bd=0,
             bg="#D9D9D9",
@@ -147,6 +165,43 @@ class Admin_Main():
         self.window.resizable(False, False)
         self.window.mainloop()
 
+    def accept_clients(self):
+        while True:
+            client_socket, client_address = self.server_socket.accept()
+            threading.Thread(target=self.handle_client, args=(client_socket, client_address)).start()
+
+    def accept_connections(self):
+        while True:
+            client_socket, client_address = self.server_socket.accept()
+            self.clients[client_address] = {"socket": client_socket, "connected_time": time.time(), "user_id": ""}
+            threading.Thread(target=self.handle_client, args=(client_socket, client_address)).start()
+
+    def handle_client(self, client_socket, client_address):
+        try:
+            user_id = client_socket.recv(1024).decode()
+            self.clients[client_address]["user_id"] = user_id
+            while True:
+                data = client_socket.recv(1024).decode()
+                if not data:
+                    break
+                # Handle client messages if needed
+        except ConnectionResetError:
+            pass
+        finally:
+            client_socket.close()
+            del self.clients[client_address]
+
+    def update_tree(self):
+        while True:
+            items = self.tree.get_children()
+            for item in items:
+                self.tree.delete(item)
+            for i, (address, info) in enumerate(self.clients.items(), start=1):
+                elapsed_time = time.time() - info["connected_time"]
+                self.tree.insert("", "end", text=str(i), values=(address[0], info["user_id"], "{:.2f} sec".format(elapsed_time)))
+            time.sleep(1)
+
+
     def create_socket(self, port=55555):
         threading.Thread(target=self._create_socket, args=(port,)).start()
 
@@ -195,3 +250,4 @@ class Admin_Main():
             print("Error:", e)
         finally:
             server_socket.close()
+

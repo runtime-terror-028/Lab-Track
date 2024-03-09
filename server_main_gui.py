@@ -4,7 +4,6 @@ import socket
 import threading
 import sys
 import openpyxl
-import login_system
 from login_system import status
 from tkinter import ttk
 import time

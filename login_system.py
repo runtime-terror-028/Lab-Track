@@ -1,6 +1,5 @@
 import openpyxl
 from tkinter import messagebox
-import socket
 
 class status:
     session_status = False

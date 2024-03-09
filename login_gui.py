@@ -1,6 +1,5 @@
 import tkinter as tk
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Canvas, Entry, Button, PhotoImage
 import login_system
 from tkinter import messagebox
 import socket

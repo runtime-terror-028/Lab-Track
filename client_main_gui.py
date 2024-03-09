@@ -1,12 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox
-import openpyxl
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Canvas, Button, PhotoImage
 import time
 import socket
 import login_system
-import login_gui
 import login_system
 
 class Client_Main():#<---------main admin window

@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import openpyxl
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Canvas, Entry, Text, Button, PhotoImage
 import time
 import socket
 
